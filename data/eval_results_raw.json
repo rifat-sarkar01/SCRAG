@@ -1,0 +1,170 @@
+[
+  {
+    "question": "What are the main causes of the French Revolution?",
+    "expected_facts": [
+      "financial crisis and state bankruptcy",
+      "social inequality between estates",
+      "Enlightenment ideas about liberty and equality",
+      "food shortages and bread prices"
+    ],
+    "baseline_answer": "The main causes of the French Revolution include a combination of social, political, and economic factors that led to a crisis in the late 1780s. These included:\n\n- A growing population (from 21 to 28 million between 1715 and 1789), with increasing urbanization.\n- Financial crises due to insufficient state revenues despite economic growth, exacerbated by tax farming systems.\n- Heavy taxation falling mainly on the lower classes, while the nobility and Church enjoyed exemptions.\n- Resistance to reform by the ruling elite and indecisive policies by Louis XVI and his ministers.\n- The inability of the existing regime to manage these crises effectively.\n\nThese factors culminated in widespread unrest and ultimately triggered the Revolution.",
+    "baseline_contexts": [
+      "French Revolution\nThe French Revolution[a] was a period of political and societal change in France that began with the Estates General of 1789 and ended with the Coup of 18 Brumaire on 9 November 1799. Many of the revolution's ideas are considered fundamental principles of liberal democracy,[1] and its values remain central to modern French political discourse.[2] It was caused by a combination of social, political, and economic factors which the existing regime proved unable to manage.",
+      "The Revolution resulted from multiple long-term and short-term factors, culminating in a social, economic, financial and political crisis in the late 1780s.[3][4][5] Combined with resistance to reform by the ruling elite and indecisive policy by Louis XVI and his ministers, the result was a crisis the state was unable to manage.[6][7] Between 1715 and 1789, the French population grew from 21 to 28 million, 20% of whom lived in towns or cities, Paris alone having over 600,000 inhabitants.[8] This",
+      "France faced a series of budgetary crises during the 18th century as revenues failed to keep pace with expenditure.[21][22] Despite solid economic growth, the use of tax farmers meant this was not reflected in a proportional growth in state tax income.[21] As the nobility and Church benefited from a variety of exemptions, the tax burden fell mainly on the lower classes.[23] Reform was difficult because new tax laws had to be registered with regional judicial bodies or parlements that were able",
+      "which the existing regime proved unable to manage. Part of the Atlantic Revolutions\nDate | 5 May 1789 – 9 November 1799 (10 years, 6 months, and 4 days)\nLocation | France\nOutcome | - Abolition of the Ancien régime and creation of constitutional monarchy\n- Proclamation of the French First Republic in September 1792\n- Reign of Terror and execution of Louis XVI\n- French Revolutionary Wars\n- Establishment of the French Consulate in November 1799"
+    ],
+    "baseline_elapsed_s": 62.34,
+    "corrected_answer": "The main causes of the French Revolution include a combination of social, political, and economic factors that led to a crisis in the late 1780s. These included:\n\n- A growing population (from 21 to 28 million between 1715 and 1789), with increasing urbanization.\n- Financial crises due to insufficient state revenues despite economic growth, exacerbated by tax farming systems.\n- Heavy taxation falling mainly on the lower classes, while the nobility and Church enjoyed exemptions.\n- Resistance to reform by the ruling elite and indecisive policies by Louis XVI and his ministers.\n- The inability of the existing regime to manage these combined pressures.\n\nThese factors culminated in widespread unrest and ultimately triggered the Revolution.",
+    "corrected_contexts": [
+      "French Revolution\nThe French Revolution[a] was a period of political and societal change in France that began with the E…",
+      "The Revolution resulted from multiple long-term and short-term factors, culminating in a social, economic, financial and…",
+      "France faced a series of budgetary crises during the 18th century as revenues failed to keep pace with expenditure.[21][…",
+      "which the existing regime proved unable to manage. Part of the Atlantic Revolutions\nDate | 5 May 1789 – 9 November 1799 …"
+    ],
+    "corrected_elapsed_s": 125.08,
+    "corrected_trace_len": 5,
+    "baseline_scores": {
+      "faithfulness": 0.9487179487179488,
+      "answer_relevancy": 0.9664736997154849
+    },
+    "corrected_scores": {
+      "faithfulness": 0.150997150997151,
+      "answer_relevancy": 0.9777323716691352
+    }
+  },
+  {
+    "question": "How does the CRISPR-Cas9 system edit DNA?",
+    "expected_facts": [
+      "guide RNA directs Cas9 to target sequence",
+      "Cas9 creates double-strand break in DNA",
+      "cell repairs the break via HDR or NHEJ"
+    ],
+    "baseline_answer": "The CRISPR-Cas9 system edits DNA by using a Cas9 enzyme guided by a synthetic guide RNA (gRNA) to target and cut specific strands of DNA that are complementary to the gRNA sequence. This allows for precise modification of the genome, such as removing existing genes or adding new ones in vivo.",
+    "baseline_contexts": [
+      "Cas9 (or \"CRISPR-associated protein 9\") is an enzyme that uses CRISPR sequences as a guide to recognize and cleave specific strands of DNA that are complementary to the CRISPR sequence. Cas9 enzymes together with CRISPR sequences form the basis of a technology known as CRISPR-Cas9 that can be used to edit genes within organisms. This editing process has a wide variety of applications including basic biological research, development of biotechnology products, and treatment of diseases.",
+      "t of CRISPR-Cas9, was not awarded the Nobel prize. CRISPR-Cas9 genome editing is a genetic engineering technique that allows for the modification of the genomes of living organisms. It is based on a simplified version of the bacterial CRISPR-Cas9 antiviral defense system. By delivering the Cas9 nuclease complexed with a synthetic guide RNA (gRNA) into a cell, the cell's genome can be cut at a desired location, allowing existing genes to be removed or new ones added in vivo",
+      "CRISPR (/ˈkrɪspər/) (short for clustered regularly interspaced short palindromic repeats) is a family of DNA sequences found in the genomes of prokaryotic organisms such as bacteria and archaea. These sequences are derived from DNA fragments of bacteriophages that had previously infected the prokaryote. They are used to detect and destroy DNA from similar bacteriophages during subsequent infections. Hence these sequences play a key role in the antiviral (i.e",
+      "biotechnology products, and treatment of diseases. The development of the CRISPR-Cas9 genome editing technique was recognized by the Nobel Prize in Chemistry in 2020 which was awarded to Emmanuelle Charpentier and Jennifer Doudna. They were the first two women to share the prize. A third researcher group, led by Virginijus Šikšnys, who had also contributed to the development of CRISPR-Cas9, was not awarded the Nobel prize."
+    ],
+    "baseline_elapsed_s": 25.41,
+    "corrected_answer": "The CRISPR-Cas9 system edits DNA by using the Cas9 enzyme, guided by a synthetic guide RNA (gRNA), to target and cleave specific DNA sequences that are complementary to the gRNA. This cut allows for modification of the genome—either removal of existing genes or insertion of new ones—in vivo.",
+    "corrected_contexts": [
+      "Cas9 (or \"CRISPR-associated protein 9\") is an enzyme that uses CRISPR sequences as a guide to recognize and cleave speci…",
+      "t of CRISPR-Cas9, was not awarded the Nobel prize. CRISPR-Cas9 genome editing is a genetic engineering technique that al…",
+      "CRISPR (/ˈkrɪspər/) (short for clustered regularly interspaced short palindromic repeats) is a family of DNA sequences f…",
+      "biotechnology products, and treatment of diseases. The development of the CRISPR-Cas9 genome editing technique was recog…"
+    ],
+    "corrected_elapsed_s": 88.65,
+    "corrected_trace_len": 5,
+    "baseline_scores": {
+      "faithfulness": 0.9487179487179488,
+      "answer_relevancy": 0.9664736997154849
+    },
+    "corrected_scores": {
+      "faithfulness": 0.150997150997151,
+      "answer_relevancy": 0.9777323716691352
+    }
+  },
+  {
+    "question": "What is the difference between supervised and unsupervised learning?",
+    "expected_facts": [
+      "supervised learning uses labeled training data",
+      "unsupervised learning finds patterns without labels",
+      "supervised learning includes classification and regression",
+      "unsupervised learning includes clustering and dimensionality reduction"
+    ],
+    "baseline_answer": "Supervised learning uses labeled data to train models that map inputs to outputs, while unsupervised learning finds patterns in unlabeled data to discover underlying structures.",
+    "baseline_contexts": [
+      "2. Unsupervised Learning: The model finds patterns in unlabeled data.\n   - Goal: Discover the underlying structure or distribution of the data.\n   - Types:\n     a. Clustering: Grouping data points (e.g., Customer Segmentation).\n     b. Dimensionality Reduction: Reducing the number of features (e.g., PCA).\n\n3. Reinforcement Learning: An agent learns to make decisions by interacting with\n   an environment to maximize a reward. (Not covered in detail here).",
+      "================================================== TABLE OF CONTENTS\n-----------------\n1.  Introduction to Machine Learning\n2.  Core Concepts & Terminology\n3.  Data Preprocessing\n4.  Model Evaluation & Validation\n5.  Supervised Learning - Regression\n6.  Supervised Learning - Classification\n7.  Unsupervised Learning - Clustering\n8.  Unsupervised Learning - Dimensionality Reduction\n9.  Intermediate Topics (Ensemble Methods, SVM, etc.)\n10. The Machine Learning Workflow\n11. Glossary of Terms",
+      "th data and an algorithm to find the rules itself. Types of Machine Learning:\n-------------------------\n1. Supervised Learning: The model learns from labeled data.\n   - Goal: Map input (X) to output (Y) based on example pairs.\n   - Types:\n     a. Classification: Predicting a discrete category (e.g., Spam/Not Spam).\n     b. Regression: Predicting a continuous value (e.g., House Price).",
+      "1. Bagging (Bootstrap Aggregating):\n   - Trains multiple models in parallel on different subsets of the data\n     (bootstrapped samples).\n   - Reduces variance and helps prevent overfitting.\n   - Example: Random Forest.\n\n2. Random Forest:\n   - An ensemble of Decision Trees.\n   - Each tree is trained on a bootstrapped sample of the data and a random\n     subset of features.\n   - Prediction is the majority vote (classification) or average (regression)."
+    ],
+    "baseline_elapsed_s": 19.23,
+    "corrected_answer": "Supervised Learning uses labeled data to learn mapping from input (X) to output (Y), aiming to predict discrete categories or continuous values. Unsupervised Learning finds patterns in unlabeled data, focusing on discovering underlying structure or reducing dimensions without predefined outputs.",
+    "corrected_contexts": [
+      "2. Unsupervised Learning: The model finds patterns in unlabeled data.\n   - Goal: Discover the underlying structure or di…",
+      "================================================== TABLE OF CONTENTS\n-----------------\n1.  Introduction to Machine Learn…",
+      "th data and an algorithm to find the rules itself. Types of Machine Learning:\n-------------------------\n1. Supervised Le…",
+      "1. Bagging (Bootstrap Aggregating):\n   - Trains multiple models in parallel on different subsets of the data\n     (boots…"
+    ],
+    "corrected_elapsed_s": 88.13,
+    "corrected_trace_len": 5,
+    "baseline_scores": {
+      "faithfulness": 0.9487179487179488,
+      "answer_relevancy": 0.9664736997154849
+    },
+    "corrected_scores": {
+      "faithfulness": 0.150997150997151,
+      "answer_relevancy": 0.9777323716691352
+    }
+  },
+  {
+    "question": "What causes the northern lights (aurora borealis)?",
+    "expected_facts": [
+      "charged particles from solar wind",
+      "interaction with Earth's magnetic field",
+      "collisions with atmospheric gases produce light"
+    ],
+    "baseline_answer": "Charged particles from the Sun collide with atoms in Earth's upper atmosphere, exciting them to emit light. This process creates the northern lights (aurora borealis), especially visible in high-latitude regions like the Arctic. The collisions involve electrons accelerated during their final descent into the atmosphere, primarily along magnetic field lines, and result in colorful displays such as green, red, or purple.",
+    "baseline_contexts": [
+      "An aurora (plural: aurorae or auroras) is a natural light display in Earth's\nupper atmosphere caused by charged particles from the Sun colliding with atoms\nin the atmosphere. These collisions excite oxygen and nitrogen, which then emit\nlight of different colors such as green, red, and purple. When observed in\nhigh-latitude regions they are called polar lights and aurora polaris. In the\nArctic they are called the northern lights or aurora borealis; in the",
+      "The main findings have been that auroral arcs and other bright forms are due\nto electrons that have been accelerated during the final few 10,000 km or so\nof their plunge into the atmosphere. These electrons often, but not always,\nexhibit a peak in their energy distribution, and are preferentially aligned\nalong the local direction of the magnetic field. Electrons are mainly\nresponsible for diffuse and pulsating auroras have, in contrast, a smoothly",
+      "outbursts of auroras, mainly around midnight (\"unloading process\").\n\n- A geomagnetic storm resulting from greater interaction adds many more\n  particles to the plasma trapped around Earth, also producing enhancement of\n  the \"ring current\". Occasionally the resulting modification of Earth's\n  magnetic field can be so strong that it produces auroras visible at middle\n  latitudes, on field lines much closer to the equator than those of the\n  auroral zone.",
+      "Auroras display dynamic patterns of radiant light that appear as curtains,\nrays, spirals or dynamic flickers covering the entire sky. Auroras are the\nresult of disturbances in the Earth's magnetosphere caused by enhanced speeds\nof solar wind from coronal holes and coronal mass ejections. These disturbances\nalter the trajectories of charged particles in the magnetospheric plasma.\nThese particles, mainly electrons and protons, precipitate into the upper"
+    ],
+    "baseline_elapsed_s": 29.2,
+    "corrected_answer": "Charged particles from the Sun colliding with atoms in Earth's atmosphere cause the northern lights (aurora borealis). These collisions excite oxygen and nitrogen, which emit light of different colors such as green, red, and purple. The phenomenon occurs in high-latitude regions due to disturbances in Earth’s magnetosphere caused by enhanced solar wind speeds from coronal holes and coronal mass ejections, altering the trajectories of charged particles that precipitate into the upper atmosphere.",
+    "corrected_contexts": [
+      "An aurora (plural: aurorae or auroras) is a natural light display in Earth's\nupper atmosphere caused by charged particle…",
+      "The main findings have been that auroral arcs and other bright forms are due\nto electrons that have been accelerated dur…",
+      "outbursts of auroras, mainly around midnight (\"unloading process\").\n\n- A geomagnetic storm resulting from greater intera…",
+      "Auroras display dynamic patterns of radiant light that appear as curtains,\nrays, spirals or dynamic flickers covering th…"
+    ],
+    "corrected_elapsed_s": 86.4,
+    "corrected_trace_len": 5,
+    "baseline_scores": {
+      "faithfulness": 0.9487179487179488,
+      "answer_relevancy": 0.9664736997154849
+    },
+    "corrected_scores": {
+      "faithfulness": 0.150997150997151,
+      "answer_relevancy": 0.9777323716691352
+    }
+  },
+  {
+    "question": "How does the TCP/IP protocol suite work?",
+    "expected_facts": [
+      "IP handles addressing and routing of packets",
+      "TCP provides reliable ordered delivery",
+      "data is split into packets for transmission",
+      "handshake establishes connection before data transfer"
+    ],
+    "baseline_answer": "The TCP/IP protocol suite works by defining how data is packaged, addressed, transmitted, routed, and received across networks. It consists of layered protocols, with TCP and IP being the primary ones. The suite is practically divided into four layers:\n\n1. **Application Layer** – Provides high-level protocols for specific services (e.g., HTTP, FTP, SMTP) where user applications interact with the network; data unit is a message/data.\n\n2. **Transport Layer** – Ensures reliable or efficient delivery of data between systems; uses TCP (connection-oriented, reliable, ordered) or UDP (connectionless, faster); data unit is a segment (TCP) or datagram (UDP).\n\n3. **Internet Layer (Network Layer)** – Handles logical addressing and routing of packets across networks using IP (IPv4/IPv6) and ICMP; determines the best path for data transmission; data unit is a packet.\n\nData flows through these layers, from application to physical layer for transmission, then back up upon receipt, enabling communication between devices on different networks.",
+    "baseline_contexts": [
+      "What is TCP/IP?\nTCP/IP is the foundational communication suite of the internet and most private\nnetworks. It defines how data is packaged, addressed, transmitted, routed, and\nreceived. It is a set of layered protocols, not just two protocols, though TCP\nand IP are the primary ones.\n\nHistory:\n- Developed by the U.S. Department of Defense (DARPA) in the 1970s.\n- Designed to be robust, fault-tolerant, and able to interconnect different types\n  of computer systems.",
+      "ers), TCP/IP is practically divided into 4\nlayers: 1.  Application Layer\n    - Provides high-level protocols for specific data exchange services.\n    - Where user applications interact with the network.\n    - Protocols: HTTP, HTTPS, FTP, SFTP, SMTP, POP3, IMAP, DNS, DHCP, SSH, Telnet.\n    - Data unit: Message / Data.",
+      "\n    - Data unit: Segment (TCP) or Datagram (UDP). 3.  Internet Layer (Network Layer)\n    - Handles the logical addressing and routing of packets across networks.\n    - Determines the best path to send data from source to destination.\n    - Main Protocol:\n        - IP (Internet Protocol) - IPv4 and IPv6.\n        - Also includes ICMP (Internet Control Message Protocol - used for ping/\n          traceroute).\n    - Data unit: Packet.",
+      "--------------------------------------------------------------------------------\nKey Differences: TCP vs. UDP\n--------------------------------------------------------------------------------\n\n- TCP (Transmission Control Protocol):\n  - Connection-oriented (requires handshake).\n  - Reliable (guarantees delivery).\n  - Ordered (segments arrive in sequence).\n  - Slower, higher overhead.\n  - Used for: Web browsing (HTTP/HTTPS), Email (SMTP), File transfers (FTP), SSH."
+    ],
+    "baseline_elapsed_s": 54.99,
+    "corrected_answer": "The TCP/IP protocol suite works by defining how data is packaged, addressed, transmitted, routed, and received across networks. It consists of layered protocols, with TCP and IP being the primary ones. The suite is practically divided into four layers:\n\n1. **Application Layer** – Provides high-level protocols for specific services (e.g., HTTP, FTP, SMTP) where user applications interact with the network; data unit is a message/data.\n\n2. **Transport Layer** – Ensures reliable or efficient delivery of data between systems; uses TCP (connection-oriented, reliable, ordered) or UDP (connectionless, faster); data unit is a segment (TCP) or datagram (UDP).\n\n3. **Internet Layer (Network Layer)** – Handles logical addressing and routing of packets across networks using IP (IPv4/IPv6) and ICMP; determines the best path for data transmission; data unit is a packet.\n\nData flows through these layers, from application to physical layer for transmission, then back up upon receipt, enabling communication between devices on different networks.",
+    "corrected_contexts": [
+      "What is TCP/IP?\nTCP/IP is the foundational communication suite of the internet and most private\nnetworks. It defines how…",
+      "ers), TCP/IP is practically divided into 4\nlayers: 1.  Application Layer\n    - Provides high-level protocols for specifi…",
+      "\n    - Data unit: Segment (TCP) or Datagram (UDP). 3.  Internet Layer (Network Layer)\n    - Handles the logical addressi…",
+      "--------------------------------------------------------------------------------\nKey Differences: TCP vs. UDP\n----------…"
+    ],
+    "corrected_elapsed_s": 119.6,
+    "corrected_trace_len": 5,
+    "baseline_scores": {
+      "faithfulness": 0.9487179487179488,
+      "answer_relevancy": 0.9664736997154849
+    },
+    "corrected_scores": {
+      "faithfulness": 0.150997150997151,
+      "answer_relevancy": 0.9777323716691352
+    }
+  }
+]

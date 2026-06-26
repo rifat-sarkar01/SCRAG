@@ -1,0 +1,271 @@
+================================================================================
+                      TCP/IP & NETWORKING TERMS – COMPLETE GUIDE
+================================================================================
+
+SECTION 1: TCP/IP (TRANSMISSION CONTROL PROTOCOL / INTERNET PROTOCOL)
+================================================================================
+
+What is TCP/IP?
+TCP/IP is the foundational communication suite of the internet and most private
+networks. It defines how data is packaged, addressed, transmitted, routed, and
+received. It is a set of layered protocols, not just two protocols, though TCP
+and IP are the primary ones.
+
+History:
+- Developed by the U.S. Department of Defense (DARPA) in the 1970s.
+- Designed to be robust, fault-tolerant, and able to interconnect different types
+  of computer systems.
+
+--------------------------------------------------------------------------------
+The TCP/IP Model (4 Layers)
+--------------------------------------------------------------------------------
+
+Unlike the OSI model (which has 7 layers), TCP/IP is practically divided into 4
+layers:
+
+1.  Application Layer
+    - Provides high-level protocols for specific data exchange services.
+    - Where user applications interact with the network.
+    - Protocols: HTTP, HTTPS, FTP, SFTP, SMTP, POP3, IMAP, DNS, DHCP, SSH, Telnet.
+    - Data unit: Message / Data.
+
+2.  Transport Layer
+    - Responsible for end-to-end communication between devices.
+    - Manages flow control, error checking, and data segmentation/reassembly.
+    - Main Protocols:
+        - TCP (Transmission Control Protocol) - Connection-oriented, reliable.
+        - UDP (User Datagram Protocol) - Connectionless, faster but unreliable.
+    - Data unit: Segment (TCP) or Datagram (UDP).
+
+3.  Internet Layer (Network Layer)
+    - Handles the logical addressing and routing of packets across networks.
+    - Determines the best path to send data from source to destination.
+    - Main Protocol:
+        - IP (Internet Protocol) - IPv4 and IPv6.
+        - Also includes ICMP (Internet Control Message Protocol - used for ping/
+          traceroute).
+    - Data unit: Packet.
+
+4.  Network Access Layer (Link / Physical Layer)
+    - Combines the physical and data link functions.
+    - Handles the physical transmission of data over the network hardware
+      (Ethernet, Wi-Fi).
+    - Deals with MAC addresses (Media Access Control) and framing.
+    - Data unit: Frame.
+
+--------------------------------------------------------------------------------
+How TCP Works (Connection-Oriented)
+--------------------------------------------------------------------------------
+
+TCP ensures reliable delivery by establishing a connection before sending data.
+
+- Three-Way Handshake (Establishing connection):
+    1.  Client sends a SYN (Synchronize) packet to the server.
+    2.  Server replies with a SYN-ACK (Synchronize-Acknowledge) packet.
+    3.  Client sends an ACK (Acknowledge) packet back.
+    - Connection is now established.
+
+- Data Transfer:
+    - Data is split into segments, each assigned a sequence number.
+    - The receiver sends ACKs for received segments.
+    - If the sender does not receive an ACK within a timeout, it retransmits
+      the segment.
+
+- Flow Control: Uses windowing to prevent overwhelming the receiver.
+- Error Checking: Uses checksums to verify data integrity.
+- Termination: Uses a Four-Way Handshake (FIN/ACK) to gracefully close the
+  connection.
+
+--------------------------------------------------------------------------------
+How IP Works (Connectionless)
+--------------------------------------------------------------------------------
+
+IP is responsible for addressing and routing.
+
+- IPv4: 32-bit addresses (e.g., 192.168.1.1). Limited to about 4.3 billion
+  addresses.
+- IPv6: 128-bit addresses (e.g., 2001:0db8:85a3::8a2e:0370:7334). Virtually
+  unlimited.
+- Routing: Each packet is sent independently, and routers inspect the destination
+  IP address to forward it hop-by-hop until it reaches its destination.
+- Fragmentation: If a packet is too large for the network, IP fragments it into
+  smaller packets and reassembles them at the destination.
+
+--------------------------------------------------------------------------------
+Key Differences: TCP vs. UDP
+--------------------------------------------------------------------------------
+
+- TCP (Transmission Control Protocol):
+  - Connection-oriented (requires handshake).
+  - Reliable (guarantees delivery).
+  - Ordered (segments arrive in sequence).
+  - Slower, higher overhead.
+  - Used for: Web browsing (HTTP/HTTPS), Email (SMTP), File transfers (FTP), SSH.
+
+- UDP (User Datagram Protocol):
+  - Connectionless (no handshake).
+  - Unreliable (no guarantee of delivery).
+  - Unordered (packets may arrive out of sync).
+  - Faster, lower overhead (no retransmissions).
+  - Used for: Live streaming, VoIP, online gaming, DNS lookups, SNMP.
+
+================================================================================
+SECTION 2: ESSENTIAL NETWORKING TERMS (GLOSSARY)
+================================================================================
+
+--------------------------------------------------------------------------------
+IP Address
+--------------------------------------------------------------------------------
+A unique numerical label assigned to each device connected to a computer network.
+- Static IP: Manually configured and never changes.
+- Dynamic IP: Assigned automatically by a DHCP server and may change.
+- Public IP: Globally routable on the internet.
+- Private IP: Used within local networks (e.g., 10.x.x.x, 172.16.x.x,
+  192.168.x.x).
+
+--------------------------------------------------------------------------------
+Subnet Mask & CIDR
+--------------------------------------------------------------------------------
+- Subnet Mask: Used to divide an IP address into the network portion and the host
+  portion. (e.g., 255.255.255.0).
+- CIDR (Classless Inter-Domain Routing): A more flexible way to represent subnets
+  using a slash notation (e.g., /24 means 255.255.255.0).
+
+--------------------------------------------------------------------------------
+Default Gateway
+--------------------------------------------------------------------------------
+The node (usually a router) in a network that serves as the access point to
+another network (often the internet). Devices send packets destined outside their
+local subnet to the default gateway.
+
+--------------------------------------------------------------------------------
+DNS (Domain Name System)
+--------------------------------------------------------------------------------
+The "phonebook of the internet." DNS translates human-readable domain names
+(e.g., google.com) into machine-readable IP addresses (e.g., 142.250.190.46).
+- Records: A (IPv4), AAAA (IPv6), CNAME (Alias), MX (Mail exchange), TXT (Text).
+
+--------------------------------------------------------------------------------
+DHCP (Dynamic Host Configuration Protocol)
+--------------------------------------------------------------------------------
+A network protocol that automatically assigns IP addresses and other network
+configuration parameters (subnet mask, default gateway, DNS) to devices on a
+network, reducing the need for manual configuration.
+- DORA Process: Discover, Offer, Request, Acknowledge.
+
+--------------------------------------------------------------------------------
+MAC Address (Media Access Control)
+--------------------------------------------------------------------------------
+A unique hardware identifier assigned to a network interface controller (NIC) at
+the factory. It operates at Layer 2 (Data Link layer) of the OSI model.
+Addresses are 48-bit hexadecimal (e.g., 00:1A:2B:3C:4D:5E).
+
+--------------------------------------------------------------------------------
+ARP (Address Resolution Protocol)
+--------------------------------------------------------------------------------
+Used to map an IP address (Layer 3) to a MAC address (Layer 2) on a local
+network. When a device wants to communicate with another IP on its local subnet,
+it broadcasts an ARP request asking "Who has this IP?" and the owner replies with
+its MAC address.
+
+--------------------------------------------------------------------------------
+NAT (Network Address Translation)
+--------------------------------------------------------------------------------
+A method used by routers to modify the source or destination IP addresses of
+packets. Primarily used to allow multiple devices on a private network (using
+private IPs) to share a single public IP address to access the internet. This
+also provides basic security by hiding internal structures.
+
+--------------------------------------------------------------------------------
+Firewall
+--------------------------------------------------------------------------------
+A network security device (hardware or software) that monitors and controls
+incoming and outgoing network traffic based on predetermined security rules.
+- Stateful: Tracks active connections.
+- Stateless: Filters based solely on packet headers.
+- Next-Gen Firewalls (NGFW): Include deep packet inspection and intrusion
+  prevention.
+
+--------------------------------------------------------------------------------
+VPN (Virtual Private Network)
+--------------------------------------------------------------------------------
+Extends a private network across a public network (like the internet), enabling
+users to send and receive data as if their devices were directly connected to the
+private network. Creates an encrypted "tunnel" for data.
+
+--------------------------------------------------------------------------------
+Ports
+--------------------------------------------------------------------------------
+Logical endpoints on a device that correspond to specific services or processes.
+- Range: 0 to 65535.
+- Well-Known Ports (0-1023):
+  - 20/21: FTP (File Transfer Protocol)
+  - 22: SSH (Secure Shell)
+  - 23: Telnet
+  - 25: SMTP (Simple Mail Transfer Protocol)
+  - 53: DNS
+  - 80: HTTP (Hypertext Transfer Protocol)
+  - 110: POP3 (Email)
+  - 143: IMAP (Email)
+  - 443: HTTPS (HTTP Secure)
+  - 3389: RDP (Remote Desktop Protocol)
+
+--------------------------------------------------------------------------------
+HTTP vs. HTTPS
+--------------------------------------------------------------------------------
+- HTTP: Hypertext Transfer Protocol. Transmits data in plaintext. Insecure and
+  vulnerable to interception.
+- HTTPS: HTTP Secure. Encrypts data using TLS/SSL certificates. Uses port 443 and
+  ensures data integrity, confidentiality, and authentication.
+
+--------------------------------------------------------------------------------
+Packet / Frame / Segment
+--------------------------------------------------------------------------------
+- Segment: The data unit at the Transport Layer (TCP).
+- Packet (Datagram): The data unit at the Internet Layer (IP). Contains the
+  source/destination IPs.
+- Frame: The data unit at the Network Access Layer (Data Link). Contains the
+  source/destination MAC addresses.
+
+--------------------------------------------------------------------------------
+OSI Model (Overview)
+--------------------------------------------------------------------------------
+The OSI (Open Systems Interconnection) model is a conceptual framework
+standardizing networking functions. While TCP/IP is the practical model, OSI is
+used for troubleshooting and teaching.
+- Layer 7: Application (User interfaces - HTTP, FTP)
+- Layer 6: Presentation (Data format encryption - SSL/TLS, JPEG)
+- Layer 5: Session (Authentication, session management - NetBIOS, RPC)
+- Layer 4: Transport (Reliability - TCP, UDP)
+- Layer 3: Network (Routing and addressing - IP)
+- Layer 2: Data Link (MAC addresses, switching - Ethernet)
+- Layer 1: Physical (Cables, radio waves, hardware)
+
+--------------------------------------------------------------------------------
+Bandwidth vs. Throughput vs. Latency
+--------------------------------------------------------------------------------
+- Bandwidth: The maximum theoretical data transfer capacity of a network
+  (e.g., 1 Gbps).
+- Throughput: The actual measured data transfer speed achieved (often less than
+  bandwidth).
+- Latency: The delay or time it takes for data to travel from source to
+  destination (measured in milliseconds). Often called "ping."
+
+--------------------------------------------------------------------------------
+Load Balancer
+--------------------------------------------------------------------------------
+A device or software that distributes incoming network traffic across multiple
+servers. It prevents any single server from becoming overloaded, improving
+reliability and availability (SSL offloading, health checks, session
+persistence).
+
+--------------------------------------------------------------------------------
+Proxy Server
+--------------------------------------------------------------------------------
+An intermediary server that separates end-users from the websites they browse.
+It forwards requests and caches responses, which can be used for anonymity,
+content filtering, and performance enhancement.
+
+================================================================================
+END OF GUIDE
+================================================================================

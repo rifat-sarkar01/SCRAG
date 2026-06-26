@@ -1,0 +1,501 @@
+================================================================================
+                           WIKIPEDIA EXTRACT: AURORA
+================================================================================
+
+An aurora (plural: aurorae or auroras) is a natural light display in Earth's
+upper atmosphere caused by charged particles from the Sun colliding with atoms
+in the atmosphere. These collisions excite oxygen and nitrogen, which then emit
+light of different colors such as green, red, and purple. When observed in
+high-latitude regions they are called polar lights and aurora polaris. In the
+Arctic they are called the northern lights or aurora borealis; in the
+Antarctic, the term southern lights or aurora australis is used.
+
+Auroras display dynamic patterns of radiant light that appear as curtains,
+rays, spirals or dynamic flickers covering the entire sky. Auroras are the
+result of disturbances in the Earth's magnetosphere caused by enhanced speeds
+of solar wind from coronal holes and coronal mass ejections. These disturbances
+alter the trajectories of charged particles in the magnetospheric plasma.
+These particles, mainly electrons and protons, precipitate into the upper
+atmosphere (thermosphere/exosphere). The resulting ionization and excitation
+of atmospheric constituents emit light of varying colour and complexity. The
+form of the aurora, occurring within bands around both polar regions, is also
+dependent on the amount of acceleration imparted to the precipitating
+particles.
+
+--------------------------------------------------------------------------------
+ETYMOLOGY
+--------------------------------------------------------------------------------
+
+The term aurora borealis appeared in a 1649 description by Pierre Gassendi of
+an auroral display visible all over France in 1621. Gassendi had read the
+works of Galileo Galilei, who used the term in his extensive writings about
+aurora in 1619. The term entered the English language in 1828.
+
+The word aurora is derived from the name of the Roman goddess of the dawn,
+Aurora, who travelled from east to west announcing the coming of the Sun.
+Aurora was first used in English in the 14th century. The words borealis and
+australis are derived from the names of the ancient gods of the north wind
+(Boreas) and the south wind (Auster or australis) in Greco-Roman mythology.
+
+Modern style guides recommend that the names of meteorological phenomena, such
+as aurora borealis, be uncapitalized. The name "auroras" is now the more
+common plural in the US; however, aurorae is the original Latin plural and is
+often used by scientists. In some contexts, aurora is an uncountable noun,
+multiple sightings being referred to as "the aurora".
+
+--------------------------------------------------------------------------------
+CHARACTERISATION
+--------------------------------------------------------------------------------
+
+Auroras are most commonly observed in the "auroral zone", a band approximately
+6° (~660 km) wide in latitude centred on 67° north and south. The region that
+currently displays an aurora is called the "auroral oval". The oval is
+displaced by the solar wind, pushing it about 15° away from the geomagnetic
+pole (not the geographic pole) in the noon direction and 23° away in the
+midnight direction. The peak equatorward extent of the oval is displaced
+slightly from geographic midnight. It is centred about 3–5° nightward of the
+magnetic pole so that auroral arcs reach furthest toward the equator when the
+magnetic pole in question is in between the observer and the Sun, which is
+called magnetic midnight.
+
+Early evidence for a geomagnetic connection comes from the statistics of
+auroral observations. Elias Loomis (1860), and later Hermann Fritz (1881) and
+Sophus Tromholt (1881) in more detail, established that the aurora appeared
+mainly in the auroral zone.
+
+In northern latitudes, the effect is known as the aurora borealis or the
+northern lights. The southern counterpart, the aurora australis or the
+southern lights, has features almost identical to the aurora borealis and
+changes simultaneously with changes in the northern auroral zone. The aurora
+australis is visible from high southern latitudes in Antarctica, Patagonia,
+southeastern Australia, New Zealand, and the Falkland Islands. The aurora
+borealis is visible from areas around the Arctic such as Alaska, Canada,
+Iceland, Greenland, the Faroe Islands, Scandinavia, Finland, Scotland, and
+Russia.
+
+A geomagnetic storm causes the auroral ovals (north and south) to expand,
+bringing the aurora to lower latitudes or higher in the south. On rare
+occasions, the aurora borealis can be seen as far south as the Mediterranean,
+East Asia, and the southern states of the US, while the aurora australis can
+be seen as far north as New Caledonia, South Africa, the Pilbara region in
+Western Australia, and Uruguay. During the Carrington Event, the greatest
+geomagnetic storm ever observed, auroras were seen even in the tropics.
+
+Auroras seen within the auroral oval may be directly overhead. From farther
+away, they illuminate the poleward horizon as a greenish glow, or sometimes a
+faint red, as if the Sun were rising from an unusual direction. Auroras also
+occur poleward of the auroral zone as either diffuse patches or arcs, which
+can be subvisual.
+
+Auroras are occasionally seen in latitudes below the auroral zone when a
+geomagnetic storm temporarily enlarges the auroral oval. Large geomagnetic
+storms are most common during the peak of the 11-year sunspot cycle or during
+the three years after the peak.
+
+An electron spirals (gyrates) about a field line at an angle that is
+determined by its velocity vectors, parallel and perpendicular, respectively,
+to the local geomagnetic field vector B. This angle is known as the "pitch
+angle" of the particle. The distance, or radius, of the electron from the
+field line at any time is known as its Larmor radius. The pitch angle
+increases as the electron travels to a region of greater field strength nearer
+to the atmosphere. Thus, it is possible for some particles to return, or
+mirror, if the angle becomes 90° before entering the atmosphere to collide
+with the denser molecules there. Other particles that do not mirror enter the
+atmosphere and contribute to the auroral display over a range of altitudes.
+
+Other types of auroras have been observed from space; for example, "poleward
+arcs" stretching sunward across the polar cap, the related "theta aurora",
+and "dayside arcs" near noon. These are relatively infrequent and poorly
+understood. Other interesting effects occur such as pulsating aurora, "black
+aurora" and their rarer companion "anti-black aurora" and subvisual red arcs.
+In addition to all these, a weak glow (often deep red) is observed around the
+two polar cusps, the field lines separating the ones that close through Earth
+from those that are swept into the tail and close remotely.
+
+--------------------------------------------------------------------------------
+ALTITUDE
+--------------------------------------------------------------------------------
+
+Starting in 1911, Carl Størmer and his colleagues used cameras to triangulate
+more than 12,000 auroras. They found no auroras below 70 km (43 mi) and only
+6.5% above 150 km (93 mi), with a maximum in the height distribution around
+100 km (62 mi).
+
+--------------------------------------------------------------------------------
+FORMS
+--------------------------------------------------------------------------------
+
+According to Clark (2007), there are five main forms that can be seen from the
+ground, from least to most visible:
+
+- A mild glow, near the horizon. These can be close to the limit of
+  visibility, but can be distinguished from moonlit clouds because stars can
+  be seen undiminished through the glow.
+- Patches or surfaces that look like clouds.
+- Arcs curve across the sky.
+- Rays are light and dark stripes across arcs, reaching upwards by various
+  amounts.
+- Coronas cover much of the sky and diverge from one point on it.
+
+Brekke (1994) also described some auroras as "curtains". The similarity to
+curtains is often enhanced by folds within the arcs. Arcs can fragment or
+break up into separate, at times rapidly changing, often rayed features that
+may fill the whole sky. These are also known as discrete auroras, which are at
+times bright enough to read a newspaper at night. These forms are consistent
+with auroras being shaped by Earth's magnetic field. The appearances of arcs,
+rays, curtains, and coronas are determined by the shapes of the luminous parts
+of the atmosphere and a viewer's position.
+
+--------------------------------------------------------------------------------
+COLOURS AND WAVELENGTHS OF AURORAL LIGHT
+--------------------------------------------------------------------------------
+
+- Red: At its highest altitudes, excited atomic oxygen emits at 630 nm (red);
+  low concentration of atoms and lower sensitivity of eyes at this wavelength
+  make this colour visible only under more intense solar activity. The low
+  number of oxygen atoms and their gradually diminishing concentration is
+  responsible for the faint appearance of the top parts of the "curtains".
+  Scarlet, crimson, and carmine are the most often seen hues of red for the
+  auroras.
+
+- Green: At lower altitudes, the more frequent collisions suppress the 630 nm
+  (red) mode: rather the 557.7 nm emission (green) dominates. A fairly high
+  concentration of atomic oxygen and higher eye sensitivity in green make
+  green auroras the most common. The excited molecular nitrogen (atomic
+  nitrogen being rare due to the high stability of the N2 molecule) plays a
+  role here, as it can transfer energy by collision with an oxygen atom,
+  which then radiates it away at the green wavelength. (Red and green can also
+  mix together to produce pink or yellow hues.) The rapid decrease in
+  concentration of atomic oxygen below about 100 km is responsible for the
+  abrupt-looking end of the lower edges of the curtains. Both the 557.7 and
+  630.0 nm wavelengths correspond to forbidden transitions of atomic oxygen,
+  a slow mechanism responsible for the graduality (0.7 s and 107 s
+  respectively) of flaring and fading.
+
+- Blue: At yet lower altitudes, atomic oxygen is uncommon, and molecular
+  nitrogen and ionized molecular nitrogen take over in producing visible
+  light emission, radiating at a large number of wavelengths in both red and
+  blue parts of the spectrum, with 428 nm (blue) being dominant. Blue and
+  purple emissions, typically at the lower edges of the "curtains", show up at
+  the highest levels of solar activity. The molecular nitrogen transitions
+  are much faster than the atomic oxygen ones.
+
+- White/continuum: White auroral emission (often appearing mauve) has been
+  observed in the colour spectrum of STEVE, and within the aurora in the oval
+  and on the poleward edge. The white colour is due to the pseudo-continuum
+  spectrum of these auroral forms, which contains emission in all colours
+  throughout the optical range, and has been observed with various
+  spectrograph instruments.
+
+- Ultraviolet: Ultraviolet radiation from auroras (within the optical window
+  but not visible to the human eye) has been observed with the requisite
+  equipment. Ultraviolet auroras have also been seen on Mars, Jupiter, and
+  Saturn.
+
+- Infrared: Infrared radiation, in wavelengths that are within the optical
+  window, is also part of many auroras.
+
+- Yellow and pink are a mix of red and green or blue. Yellow and pink auroras
+  are relatively rare and are associated with high solar activity. Other
+  shades of red, as well as orange and gold, also may be seen on rare
+  occasions.
+
+As red, green, and blue are linearly independent colours, additive synthesis
+could, in theory, produce most human-perceived colours, but the ones mentioned
+in this article comprise a virtually exhaustive list.
+
+--------------------------------------------------------------------------------
+CHANGES WITH TIME
+--------------------------------------------------------------------------------
+
+Auroras change with time. Over the night they begin with glows and progress
+toward coronas, although they may not reach them. They tend to fade in the
+opposite order. Until about 1963, it was thought that these changes were due
+to the rotation of the Earth under a pattern fixed with respect to the Sun.
+Later, it was found by comparing all-sky films of auroras from different
+places (collected during the International Geophysical Year) that they often
+undergo global changes in a process called auroral substorm. They change in a
+few minutes from quiet arcs all along the auroral oval to active displays
+along the dark side and after 1–3 hours they gradually change back. Changes in
+auroras over time are commonly visualized using keograms.
+
+At shorter time scales, auroras can change their appearances and intensity,
+sometimes so slowly as to be difficult to notice, and at other times rapidly
+down to the sub-second scale. The phenomenon of pulsating auroras is an
+example of intensity variations over short timescales, typically with periods
+of 2–20 seconds. This type of aurora is generally accompanied by decreasing
+peak emission heights of about 8 km for blue and green emissions and
+above-average solar wind speeds (c. 500 km/s).
+
+--------------------------------------------------------------------------------
+OTHER AURORAL EMISSIONS
+--------------------------------------------------------------------------------
+
+In addition, the aurora and associated currents produce a strong radio
+emission around 150 kHz known as auroral kilometric radiation (AKR),
+discovered in 1972. Ionospheric absorption makes AKR only observable from
+space. X-ray emissions, originating from the particles associated with
+auroras, have also been detected.
+
+A crackling noise, begins about 70 m (230 ft) above Earth's surface and is
+caused by charged particles in an inversion layer of the atmosphere formed
+during a cold night. The charged particles discharge when particles from the
+Sun hit the inversion layer, creating the noise.
+
+--------------------------------------------------------------------------------
+ABNORMAL TYPES
+--------------------------------------------------------------------------------
+
+STEVE
+-----
+In 2016, more than fifty citizen science observations described what was to
+them an unknown type of aurora which they named "STEVE", for "Strong Thermal
+Emission Velocity Enhancement". STEVE is not an aurora but is caused by a
+25 km (16 mi) wide ribbon of hot plasma at an altitude of 450 km (280 mi),
+with a temperature of 3,000 °C (3,270 K; 5,430 °F) and flowing at a speed of
+6 km/s (3.7 mi/s) (compared to 10 m/s (33 ft/s) outside the ribbon).
+
+Picket-fence aurora
+-------------------
+The processes that cause STEVE are also associated with a picket-fence aurora,
+although the latter can be seen without STEVE. It is an aurora because it is
+caused by the precipitation of electrons in the atmosphere but it appears
+outside the auroral oval, closer to the equator than typical auroras. When the
+picket-fence aurora appears with STEVE, it is below.
+
+Dune aurora
+-----------
+First reported in 2020, and confirmed in 2021, the dune aurora phenomenon was
+discovered by Finnish citizen scientists. It consists of regularly spaced,
+parallel stripes of brighter emission in the green diffuse aurora which gives
+the impression of sand dunes. The phenomenon is believed to be caused by the
+modulation of atomic oxygen density by a large-scale atmospheric wave
+travelling horizontally in a waveguide through an inversion layer in the
+mesosphere in presence of electron precipitation.
+
+Fragments of Aurora-like Emission (FAEs)
+----------------------------------------
+Fragments of Aurora-like Emission (FAEs) are small (only a few kilometres in
+diameter) bright green optical structures, which can appear either alone or in
+chain-like formations. FAEs are not driven by particle precipitation but
+instead researchers believe they are driven by the Farley-Buneman Instability,
+a local plasma instability in the ionosphere. They are a short-lived phenomenon
+appearing for typically less than a minute. They were first identified in
+2021, with the help of citizen science project AuroraZoo.
+
+Horse-collar aurora
+-------------------
+Horse-collar auroras (HCA) are auroral features in which the auroral ellipse
+shifts poleward during the dawn and dusk portions and the polar cap becomes
+teardrop-shaped. They form during periods when the interplanetary magnetic
+field (IMF) is permanently northward, when the IMF clock angle is small.
+Their formation is associated with the closure of the magnetic flux at the top
+of the dayside magnetosphere by the double lobe reconnection (DLR). There are
+approximately 8 HCA events per month, with no seasonal dependence, and that
+the IMF must be within 30 degrees of northwards.
+
+Conjugate auroras
+-----------------
+Conjugate auroras are nearly exact mirror-image auroras found at conjugate
+points in the northern and southern hemispheres on the same geomagnetic field
+lines. These generally happen at the time of the equinoxes, when there is
+little difference in the orientation of the north and south geomagnetic poles
+to the Sun. Attempts were made to image conjugate auroras by aircraft from
+Alaska and New Zealand in 1967, 1968, 1970, and 1971, with some success.
+
+--------------------------------------------------------------------------------
+CAUSES
+--------------------------------------------------------------------------------
+
+A full understanding of the physical processes that lead to different types of
+auroras is still incomplete, but the basic cause involves the interaction of
+the solar wind with Earth's magnetosphere. The varying intensity of the solar
+wind produces effects of different magnitudes but includes one or more of the
+following physical scenarios.
+
+- A quiescent solar wind flowing past Earth's magnetosphere steadily interacts
+  with it and can inject solar wind particles directly onto the geomagnetic
+  field lines that are 'open', as opposed to being 'closed' in the opposite
+  hemisphere and provide diffusion through the bow shock. It can also cause
+  particles already trapped in the radiation belts to precipitate into the
+  atmosphere. Once particles are lost to the atmosphere from the radiation
+  belts, under quiet conditions, new ones replace them only slowly, and the
+  loss cone becomes depleted. In the magnetotail, however, particle
+  trajectories seem constantly to reshuffle, probably when the particles cross
+  the very weak magnetic field near the equator. As a result, the flow of
+  electrons in that region is nearly the same in all directions ("isotropic")
+  and assures a steady supply of leaking electrons. The leakage of electrons
+  does not leave the tail positively charged, because each leaked electron
+  lost to the atmosphere is replaced by a low-energy electron drawn upward
+  from the ionosphere. Such replacement of "hot" electrons by "cold" ones is
+  in complete accord with the second law of thermodynamics. The complete
+  process, which also generates an electric ring current around Earth, is
+  uncertain.
+
+- Geomagnetic disturbance from an enhanced solar wind causes distortions of
+  the magnetotail ("magnetic substorms"). These 'substorms' tend to occur
+  after prolonged spells (on the order of hours) during which the
+  interplanetary magnetic field has had an appreciable southward component.
+  This leads to a higher rate of interconnection between its field lines and
+  those of Earth. As a result, the solar wind moves magnetic flux (tubes of
+  magnetic field lines, 'locked' together with their resident plasma) from the
+  day side of Earth to the magnetotail, widening the obstacle it presents to
+  the solar wind flow and constricting the tail on the night-side. Ultimately
+  some tail plasma can separate ("magnetic reconnection"); some blobs
+  ("plasmoids") are squeezed downstream and are carried away with the solar
+  wind; others are squeezed toward Earth where their motion feeds strong
+  outbursts of auroras, mainly around midnight ("unloading process").
+
+- A geomagnetic storm resulting from greater interaction adds many more
+  particles to the plasma trapped around Earth, also producing enhancement of
+  the "ring current". Occasionally the resulting modification of Earth's
+  magnetic field can be so strong that it produces auroras visible at middle
+  latitudes, on field lines much closer to the equator than those of the
+  auroral zone.
+
+- Acceleration of auroral charged particles invariably accompanies a
+  magnetospheric disturbance that causes an aurora. This mechanism, which is
+  believed to predominantly arise from strong electric fields along the
+  magnetic field or wave-particle interactions, raises the velocity of a
+  particle in the direction of the guiding magnetic field. The pitch angle is
+  thereby decreased and increases the chance of it being precipitated into the
+  atmosphere. Both electromagnetic and electrostatic waves, produced at the
+  time of greater geomagnetic disturbances, make a significant contribution to
+  the energizing processes that sustain an aurora. Particle acceleration
+  provides a complex intermediate process for transferring energy from the
+  solar wind indirectly into the atmosphere. The details of these phenomena
+  are not fully understood. However, it is clear that the prime source of
+  auroral particles is the solar wind feeding the magnetosphere, the reservoir
+  containing the radiation zones and temporarily magnetically trapped
+  particles confined by the geomagnetic field, coupled with particle
+  acceleration processes.
+
+Auroral particles
+-----------------
+The immediate cause of the ionization and excitation of atmospheric
+constituents leading to auroral emissions was discovered in 1960, when a
+pioneering rocket flight from Fort Churchill in Canada revealed a flux of
+electrons entering the atmosphere from above. Since then an extensive
+collection of measurements has been acquired painstakingly and with steadily
+improving resolution since the 1960s by many research teams using rockets and
+satellites to traverse the auroral zone.
+
+The main findings have been that auroral arcs and other bright forms are due
+to electrons that have been accelerated during the final few 10,000 km or so
+of their plunge into the atmosphere. These electrons often, but not always,
+exhibit a peak in their energy distribution, and are preferentially aligned
+along the local direction of the magnetic field. Electrons are mainly
+responsible for diffuse and pulsating auroras have, in contrast, a smoothly
+falling energy distribution, and an angular (pitch-angle) distribution
+favouring directions perpendicular to the local magnetic field. Pulsations
+were discovered to originate at or close to the equatorial crossing point of
+auroral zone magnetic field lines. Protons are also associated with auroras,
+both discrete and diffuse.
+
+Atmosphere
+----------
+Auroras result from emissions of photons in Earth's upper atmosphere, above
+80 km (50 mi), from ionized nitrogen atoms regaining an electron, and oxygen
+atoms and nitrogen-based molecules returning from an excited state to the
+ground state. They are ionized or excited by the collision of particles
+precipitated into the atmosphere. Both incoming electrons and protons may be
+involved.
+
+Excitation energy is lost within the atmosphere by the emission of a photon,
+or by collision with another atom or molecule:
+
+- Oxygen emissions - green or orange-red, depending on the amount of energy
+  absorbed.
+- Nitrogen emissions - blue, purple, or red; blue and purple if the molecule
+  regains an electron after it has been ionized, red if returning to ground
+  state from an excited state.
+
+Oxygen is unusual in terms of its return to ground state: it can take 0.7
+seconds to emit the 557.7 nm green light and up to two minutes for the red
+630.0 nm emission. Collisions with other atoms or molecules absorb the
+excitation energy and prevent emission; this process is called collisional
+quenching. Because the highest parts of the atmosphere contain a higher
+percentage of oxygen and lower particle densities, such collisions are rare
+enough to allow time for oxygen to emit red light. Collisions become more
+frequent progressing down into the atmosphere due to increasing density, so
+red emissions do not have time to happen, and eventually, even green light
+emissions are prevented.
+
+The change in auroral colour with altitude is therefore explained—oxygen red
+is predominant at high altitudes, followed by oxygen green and nitrogen
+blue/purple/red, then finally other hues of nitrogen blue/purple/red where
+particle collisions prevent oxygen from emissions. Green is the most common
+colour. Then comes pink, a mixture of light green and red, followed by pure
+red, then yellow (a mixture of red and green), and finally, pure blue.
+
+Precipitating protons generally produce optical emissions as incident hydrogen
+atoms after gaining electrons from the atmosphere. Proton auroras are usually
+observed at lower latitudes.
+
+Ionosphere
+----------
+Bright auroras are generally associated with Birkeland currents (Schield et
+al., 1969; Zmuda and Armstrong, 1973), which flow down into the ionosphere on
+one side of the pole and out on the other. In between, some of the current
+connects directly through the ionospheric E layer (125 km); the rest ("region
+2") detours, leaving again through field lines closer to the equator and
+closing through the "partial ring current" carried by magnetically trapped
+plasma.
+
+The ionosphere is an ohmic conductor, so some consider that such currents
+require a driving voltage, which an, as yet unspecified, dynamo mechanism can
+supply. Electric field probes in orbit above the polar cap suggest voltages of
+the order of 40,000 volts, rising up to more than 200,000 volts during intense
+magnetic storms. In another interpretation, the currents are the direct result
+of electron acceleration into the atmosphere by wave/particle interactions.
+
+Ionospheric resistance has a complex nature and leads to a secondary Hall
+current flow. Due to physics, the magnetic disturbance on the ground due to
+the main current almost cancels out, so most of the observed effect of auroras
+is due to a secondary current, the auroral electrojet. An auroral electrojet
+index (measured in nanotesla) is regularly derived from ground data and serves
+as a general measure of auroral activity.
+
+Kristian Birkeland deduced that the currents flowed in the east–west directions
+along the auroral arc, and such currents, flowing from the dayside toward
+(approximately) midnight were later named "auroral electrojets" (see also
+Birkeland currents). The ionosphere can contribute to the formation of auroral
+arcs via the feedback instability under high ionospheric resistance
+conditions, observed at night time and in the dark Winter hemisphere.
+
+--------------------------------------------------------------------------------
+INTERACTION OF THE SOLAR WIND WITH EARTH
+--------------------------------------------------------------------------------
+
+Earth is constantly immersed in the solar wind, a flow of magnetized hot
+plasma (a gas of free electrons and positive ions) emitted by the Sun in all
+directions, a result of the two-million-degree temperature of the Sun's
+outermost layer, the corona. The solar wind reaches Earth with a velocity
+typically around 400 km/s, a density of around 5 ions/cm3, and a magnetic
+field intensity of around 2–5 nT (for comparison, Earth's surface field is
+typically 30,000–50,000 nT). During magnetic storms, in particular, flows can
+be several times faster; the interplanetary magnetic field (IMF) may also be
+much stronger.
+
+Joan Feynman deduced in the 1970s that the long-term averages of solar wind
+speed correlated with geomagnetic activity. Her work resulted from data
+collected by the Explorer 33 spacecraft.
+
+The solar wind and magnetosphere consist of plasma (ionized gas), which
+conducts electricity. It is well known (since Michael Faraday's work around
+1830) that when an electrical conductor is placed within a magnetic field
+while relative motion occurs in a direction that the conductor cuts across (or
+is cut by), rather than along, the lines of the magnetic field, an electric
+current is induced within the conductor. The strength of the current depends
+on a) the rate of relative motion, b) the strength of the magnetic field, c)
+the number of conductors ganged together, and d) the distance between the
+conductor and the magnetic field, while the direction of flow is dependent
+upon the direction of relative motion. Dynamos make use of this basic process
+("the dynamo effect").
+
+================================================================================
+END OF EXTRACT
+================================================================================
+
+Source: Wikipedia (https://en.wikipedia.org/wiki/Aurora)
+Content presented as raw, unedited extract.

@@ -1,0 +1,45 @@
+[
+  {
+    "question": "What are the main causes of the French Revolution?",
+    "expected_facts": [
+      "financial crisis and state bankruptcy",
+      "social inequality between estates",
+      "Enlightenment ideas about liberty and equality",
+      "food shortages and bread prices"
+    ]
+  },
+  {
+    "question": "How does the CRISPR-Cas9 system edit DNA?",
+    "expected_facts": [
+      "guide RNA directs Cas9 to target sequence",
+      "Cas9 creates double-strand break in DNA",
+      "cell repairs the break via HDR or NHEJ"
+    ]
+  },
+  {
+    "question": "What is the difference between supervised and unsupervised learning?",
+    "expected_facts": [
+      "supervised learning uses labeled training data",
+      "unsupervised learning finds patterns without labels",
+      "supervised learning includes classification and regression",
+      "unsupervised learning includes clustering and dimensionality reduction"
+    ]
+  },
+  {
+    "question": "What causes the northern lights (aurora borealis)?",
+    "expected_facts": [
+      "charged particles from solar wind",
+      "interaction with Earth's magnetic field",
+      "collisions with atmospheric gases produce light"
+    ]
+  },
+  {
+    "question": "How does the TCP/IP protocol suite work?",
+    "expected_facts": [
+      "IP handles addressing and routing of packets",
+      "TCP provides reliable ordered delivery",
+      "data is split into packets for transmission",
+      "handshake establishes connection before data transfer"
+    ]
+  }
+]

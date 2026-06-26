@@ -1,0 +1,8 @@
+faiss-cpu
+langchain
+langgraph
+langchain-ollama
+sentence-transformers
+ragas
+python-dotenv
+pydantic
