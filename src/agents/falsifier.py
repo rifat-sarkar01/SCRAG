@@ -50,7 +50,12 @@ load_dotenv()
 # Configuration
 # ---------------------------------------------------------------------------
 
-_DEFAULT_MODEL = os.environ.get("OLLAMA_MODEL", "qwen3-vl:8b-instruct-q8_0")
+# Both functions here are adversarial/arbitration reasoning tasks (finding
+# counter-evidence, weighing it against the draft), not answer generation —
+# so they use OLLAMA_JUDGE_MODEL rather than OLLAMA_MODEL, same rationale as
+# src/agents/graders.py: don't let the model that produced the draft answer
+# also be the one deciding whether to keep/revise/overturn it.
+_DEFAULT_MODEL = os.environ.get("OLLAMA_JUDGE_MODEL", "qwen2.5:14b-instruct")
 _OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 
 # Gate flag: set ENABLE_FALSIFICATION=true in .env or environment to activate.
@@ -76,6 +81,7 @@ def _build_llm(temperature: float = 0.0) -> ChatOllama:
         model=_DEFAULT_MODEL,
         base_url=_OLLAMA_BASE_URL,
         temperature=temperature,
+        keep_alive="30m",
     )
 
 

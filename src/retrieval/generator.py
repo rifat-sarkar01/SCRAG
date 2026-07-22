@@ -53,6 +53,7 @@ def _get_llm() -> ChatOllama:
             model=_DEFAULT_MODEL,
             base_url=_OLLAMA_BASE_URL,
             temperature=0.0,
+            keep_alive="30m",
         )
     return _llm
 

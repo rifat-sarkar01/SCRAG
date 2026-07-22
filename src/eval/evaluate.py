@@ -237,10 +237,16 @@ def _reset_asyncio_loop() -> None:
     asyncio.set_event_loop(asyncio.new_event_loop())
 
 
+_RAGAS_METRIC_COLS = [
+    "faithfulness", "answer_relevancy", "answer_correctness",
+    "context_entity_recall", "context_precision", "context_recall",
+]
+
+
 def _score_with_ragas(
     samples: List[Dict[str, Any]],
     label: str = "",
-) -> Dict[str, Any]:
+) -> "tuple[Dict[str, Any], List[Dict[str, Any]]]":
     """
     Runs RAGAS metrics on *samples* using the local Ollama model.
 
@@ -257,8 +263,16 @@ def _score_with_ragas(
 
     Returns
     -------
-    Dict with metric names as keys and float|None as values.
-    All values are ``None`` if scoring raised any exception.
+    Tuple of:
+      - Dict with metric names as keys and float|None aggregate (mean) values.
+        All values are ``None`` if scoring raised any exception.
+      - List of per-row dicts (same order as *samples*), each mapping metric
+        name -> float|None for that individual item. This is what per-item
+        diagnostics and self-correction metrics MUST use instead of the
+        aggregate — using the aggregate for every row silently collapses
+        every item to the same number and makes all item-level comparisons
+        meaningless (this was the bug: every item in the report showed the
+        exact same baseline/corrected faithfulness pair).
     """
     tag = f" ({label})" if label else ""
     print(f"[RAGAS] Scoring{tag} — {len(samples)} sample(s)…")
@@ -270,6 +284,7 @@ def _score_with_ragas(
         "context_precision": None,
         "context_recall": None,
     }
+    empty_rows = [dict(empty) for _ in samples]
     try:
         from ragas import evaluate, EvaluationDataset
         from ragas.metrics import faithfulness, answer_relevancy
@@ -279,8 +294,17 @@ def _score_with_ragas(
         from langchain_ollama import ChatOllama, OllamaEmbeddings
 
         # Fully local — no external API calls.
+        # Uses OLLAMA_JUDGE_MODEL (same as the internal graph graders), NOT
+        # OLLAMA_MODEL. Previously this was hardcoded to "qwen3-vl:8b-instruct-q8_0"
+        # — the exact same model used to GENERATE the baseline answer — which
+        # meant RAGAS was scoring the model's output using the model itself as
+        # judge (self-evaluation bias), and silently ignored any env override.
         ragas_llm = LangchainLLMWrapper(
-            ChatOllama(model="qwen3-vl:8b-instruct-q8_0", temperature=0)
+            ChatOllama(
+                model=os.environ.get("OLLAMA_JUDGE_MODEL", "qwen2.5:14b-instruct"),
+                temperature=0,
+                keep_alive="30m",
+            )
         )
         ragas_embeddings = LangchainEmbeddingsWrapper(
             OllamaEmbeddings(model="nomic-embed-text")
@@ -315,7 +339,26 @@ def _score_with_ragas(
             print(f"[RAGAS]{tag} context_precision / context_recall not "
                   "available in this RAGAS version — skipping.")
 
-        run_config = RunConfig(timeout=300, max_workers=1)
+        # Local-model reality check: the previous RunConfig only set
+        # timeout=300 and max_workers=1, leaving max_retries at its default
+        # of 10 and max_wait at its default of 60 — with log_tenacity off by
+        # default. That meant a single stuck job (context_precision and
+        # context_recall in particular make several chained sub-calls per
+        # "job", not one) could silently retry up to 10 times with expon-
+        # ential backoff (worst case ~10 x (300 + 60)s ≈ 1 hour) before
+        # finally failing, with zero visibility into what was happening —
+        # this is almost certainly what made jobs 24/26 dominate the total
+        # run time. Raise the per-call ceiling (heavy metrics need more than
+        # 300s on an 8B/14B local model), but cap retries low so a genuinely
+        # stuck job fails fast instead of consuming the whole run, and turn
+        # on retry logging so failures are visible instead of silent.
+        run_config = RunConfig(
+            timeout=600,
+            max_retries=3,
+            max_wait=30,
+            max_workers=1,
+            log_tenacity=True,
+        )
 
         dataset = EvaluationDataset.from_list(samples)
         result = evaluate(
@@ -328,11 +371,23 @@ def _score_with_ragas(
         df = result.to_pandas()
 
         scores: Dict[str, Any] = {}
-        for col in [
-            "faithfulness", "answer_relevancy", "answer_correctness",
-            "context_entity_recall", "context_precision", "context_recall",
-        ]:
+        for col in _RAGAS_METRIC_COLS:
             scores[col] = float(df[col].mean()) if col in df.columns else None
+
+        # Per-row scores, aligned back to the *input* sample order. RAGAS
+        # preserves row order 1:1 with the input dataset (a failed/timed-out
+        # job becomes NaN in that row, it does not drop or reorder rows), so
+        # positional zip against `samples` is safe here.
+        per_row: List[Dict[str, Any]] = []
+        for i in range(len(samples)):
+            row: Dict[str, Any] = {}
+            for col in _RAGAS_METRIC_COLS:
+                if col in df.columns and i < len(df):
+                    val = df[col].iloc[i]
+                    row[col] = float(val) if val == val else None  # NaN check
+                else:
+                    row[col] = None
+            per_row.append(row)
 
         print(
             f"[RAGAS]{tag} "
@@ -341,11 +396,11 @@ def _score_with_ragas(
                 for k, v in scores.items()
             )
         )
-        return scores
+        return scores, per_row
 
     except BaseException as exc:  # noqa: BLE001 — catch KeyboardInterrupt/CancelledError too
         print(f"[RAGAS]{tag} Scoring failed: {type(exc).__name__}: {exc}")
-        return empty
+        return empty, empty_rows
 
 
 # ===========================================================================
@@ -896,6 +951,12 @@ def run_evaluation(
             "corrected_contexts": corrected_contexts,
             "corrected_elapsed_s": round(corrected_elapsed, 2),
             "corrected_trace_len": len(corrected_trace),
+            # Previously only the length was kept and the actual trace (which
+            # holds claim_analysis, excluded_claims, and draft_preview for
+            # every node visit) was discarded — making it impossible to see
+            # *why* a correction round did what it did without re-running
+            # with extra logging. Keep the real thing.
+            "corrected_trace": corrected_trace,
             "correction_rounds": correction_rounds,
             "reretrieval_happened": reretrieval_happened,
         }
@@ -920,19 +981,21 @@ def run_evaluation(
 
     # 4. RAGAS scoring.
     print("\n[Eval] ── RAGAS Scoring ─────────────────────────────────────────")
-    baseline_scores = _score_with_ragas(baseline_ragas_samples, label="Baseline")
+    baseline_scores, baseline_rows = _score_with_ragas(baseline_ragas_samples, label="Baseline")
     # Reset the asyncio event loop between calls to prevent CancelledError cascade.
     _reset_asyncio_loop()
-    corrected_scores = _score_with_ragas(corrected_ragas_samples, label="Self-Correcting")
+    corrected_scores, corrected_rows = _score_with_ragas(corrected_ragas_samples, label="Self-Correcting")
 
-    # Attach per-item faithfulness scores to records (for self-correction metrics).
-    # RAGAS returns aggregate only; we re-run per-item if needed, or approximate.
-    # For now we attach aggregate to each item (used for ordering in diagnostics).
-    for r in per_item_results:
-        r["baseline_faithfulness"] = baseline_scores.get("faithfulness")
-        r["corrected_faithfulness"] = corrected_scores.get("faithfulness")
-        r["baseline_scores"] = baseline_scores
-        r["corrected_scores"] = corrected_scores
+    # Attach TRUE per-item faithfulness scores to records (for self-correction
+    # metrics and diagnostics). baseline_rows/corrected_rows are positionally
+    # aligned with per_item_results (both built in the same test_items loop),
+    # so zip is safe and gives each item its own real score instead of the
+    # aggregate mean.
+    for r, brow, crow in zip(per_item_results, baseline_rows, corrected_rows):
+        r["baseline_faithfulness"] = brow.get("faithfulness")
+        r["corrected_faithfulness"] = crow.get("faithfulness")
+        r["baseline_scores"] = brow
+        r["corrected_scores"] = crow
 
     # 5. Self-correction-specific metrics.
     print("\n[Eval] ── Self-Correction Metrics ──────────────────────────────")

@@ -29,10 +29,29 @@ from pydantic import BaseModel, Field
 load_dotenv()
 
 # ---------------------------------------------------------------------------
-# Default model
+# Default models
 # ---------------------------------------------------------------------------
+#
+# IMPORTANT — separate judge model from generation model:
+# Previously every grader here defaulted to OLLAMA_MODEL, i.e. the EXACT SAME
+# model used to generate the answer being judged. That means the model was
+# grading its own output — a well-known source of self-evaluation bias (a
+# model is systematically less likely to catch error patterns from its own
+# distribution). It also happened to be a vision-language checkpoint
+# (qwen3-vl:8b-instruct), which trades some pure-text reasoning capacity for
+# vision support it doesn't need here — a bad fit for a strict text
+# fact-checking task.
+#
+# OLLAMA_JUDGE_MODEL is now a distinct, independently-configurable model used
+# for ALL grading/arbitration roles (retrieval relevance, groundedness,
+# usefulness, query rewriting). Default is qwen2.5:14b-instruct — a dense,
+# text-only, tool-calling-native instruct model with materially stronger
+# instruction-following than the 8B VL checkpoint, and no "thinking" wrapper
+# to fight with structured-output parsing. Pull it with:
+#   ollama pull qwen2.5:14b-instruct
+# Override via .env if your hardware needs a different size.
 
-_DEFAULT_MODEL = os.environ.get("OLLAMA_MODEL", "qwen3-vl:8b-instruct-q8_0")
+_JUDGE_MODEL = os.environ.get("OLLAMA_JUDGE_MODEL", "qwen2.5:14b-instruct")
 _OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 
 # ---------------------------------------------------------------------------
@@ -41,46 +60,99 @@ _OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 
 
 class RetrievalGrading(BaseModel):
-    """Structured output schema for retrieval relevance grading."""
+    """
+    Structured output schema for retrieval relevance grading.
 
+    Field order matters: ``reasoning`` is declared before ``relevant`` so the
+    model is forced to articulate its analysis before committing to a verdict
+    (chain-of-thought via schema order), rather than deciding first and
+    rationalizing after.
+    """
+
+    reasoning: str = Field(
+        description=(
+            "One or two sentences analyzing what the chunk actually says "
+            "relative to what the query asks, BEFORE deciding relevance."
+        )
+    )
     relevant: bool = Field(
         description=(
             "True if the chunk contributes useful signal for answering the query, "
             "even if it alone is insufficient to fully answer it."
         )
     )
-    reason: str = Field(
-        description="One concise sentence explaining the grading decision."
-    )
 
 
 class GroundednessGrading(BaseModel):
-    """Structured output schema for answer groundedness grading."""
+    """
+    Structured output schema for answer groundedness grading.
 
+    ``claim_analysis`` is declared first and requires an explicit numbered,
+    claim-by-claim walkthrough (each claim in the answer checked individually
+    against the context chunks) before the model commits to the aggregate
+    ``grounded`` verdict. Single-shot "is this grounded, yes/no" judgments are
+    exactly what let a weak or lazy judge default to "yes" without doing real
+    verification — decomposition is the fix.
+    """
+
+    claim_analysis: str = Field(
+        description=(
+            "Numbered list: every distinct factual claim in the ANSWER, and for "
+            "each one, which context chunk (if any) supports it, or 'UNSUPPORTED' "
+            "if no chunk supports it. Do this BEFORE deciding the final verdict. "
+            "Example:\n"
+            "1. \"Cas9 is guided by a synthetic gRNA\" — supported by chunk [1]\n"
+            "2. \"discovered in 2012\" — UNSUPPORTED, no chunk mentions a date"
+        )
+    )
     grounded: bool = Field(
         description=(
-            "True if every factual claim in the answer is directly supported "
-            "by information present in the context chunks."
+            "True only if EVERY claim in claim_analysis above was marked "
+            "supported. False if even one claim is UNSUPPORTED."
         )
     )
     unsupported_claims: List[str] = Field(
         description=(
-            "Verbatim or near-verbatim quotes of claims that are not supported "
-            "by any context chunk.  Empty list when grounded is True."
+            "Verbatim or near-verbatim quotes of claims marked UNSUPPORTED in "
+            "claim_analysis. Empty list when grounded is True."
         )
+    )
+
+
+class ChunkVerdict(BaseModel):
+    """One chunk's relevance verdict within a batch grading call."""
+
+    chunk_index: int = Field(description="1-based index matching the numbered chunk in the prompt.")
+    reasoning: str = Field(description="Brief analysis before the verdict.")
+    relevant: bool = Field(description="True if this chunk contributes useful signal.")
+
+
+class RetrievalGradingBatch(BaseModel):
+    """Structured output schema for grading ALL retrieved chunks in one call."""
+
+    verdicts: List[ChunkVerdict] = Field(
+        description="One verdict per chunk, in the same order as the numbered chunks given."
     )
 
 
 class UsefulnessGrading(BaseModel):
-    """Structured output schema for answer usefulness grading."""
+    """
+    Structured output schema for answer usefulness grading.
 
+    ``reasoning`` precedes ``useful`` for the same chain-of-thought-via-schema-
+    order reason as the other graders.
+    """
+
+    reasoning: str = Field(
+        description=(
+            "One or two sentences on whether the answer actually resolves what "
+            "was asked, BEFORE deciding the verdict."
+        )
+    )
     useful: bool = Field(
         description=(
             "True if the answer genuinely and directly resolves the user's query."
         )
-    )
-    reason: str = Field(
-        description="One concise sentence explaining the grading decision."
     )
 
 
@@ -89,12 +161,25 @@ class UsefulnessGrading(BaseModel):
 # ---------------------------------------------------------------------------
 
 
-def _build_llm(model: str = _DEFAULT_MODEL, temperature: float = 0.0) -> ChatOllama:
-    """Instantiates a ChatOllama client.  Base URL is read from the environment."""
+def _build_llm(model: str = _JUDGE_MODEL, temperature: float = 0.0) -> ChatOllama:
+    """
+    Instantiates a ChatOllama client.  Base URL is read from the environment.
+
+    keep_alive="30m": during a batch eval run, this pipeline alternates between
+    the generation model and this judge model within every single query. Ollama
+    unloads a model from VRAM when a *different* model is requested (or after
+    the default 5-minute idle timeout) — each unload/reload of a multi-GB model
+    is a real, measurable latency cost. Explicit keep_alive doesn't eliminate
+    swaps forced by VRAM pressure when both models can't fit simultaneously,
+    but it does prevent *unnecessary* extra unloads from idle timeouts stacking
+    on top of that. See OLLAMA_JUDGE_MODEL sizing note in .env.example if both
+    models don't fit in VRAM together on your hardware.
+    """
     return ChatOllama(
         model=model,
         base_url=_OLLAMA_BASE_URL,
         temperature=temperature,
+        keep_alive="30m",
     )
 
 
@@ -116,9 +201,27 @@ Rules:
 - Do NOT consider whether the chunk alone is sufficient to answer the query;
   only judge whether it contributes useful signal.
 - Do NOT hallucinate. Base your judgment solely on the text provided.
+- First write your reasoning, THEN decide relevant true/false. Do not decide
+  the verdict before writing the reasoning."""
 
-Respond ONLY in this exact JSON format, no other text:
-{"relevant": <true|false>, "reason": "<one concise sentence>"}"""
+_RETRIEVAL_GRADER_BATCH_SYSTEM = """\
+You are a strict relevance judge for a retrieval-augmented generation (RAG) system.
+
+Your task: for EACH of the numbered DOCUMENT CHUNKS below, decide whether it
+contains information directly useful for answering the QUERY. Grade every
+chunk independently — do not let your verdict on one chunk influence another.
+
+Rules (apply identically to every chunk):
+- A chunk is RELEVANT if it contains facts, definitions, explanations, or data
+  that the query is asking about — even partially.
+- A chunk is NOT RELEVANT if it is on a related topic but does not address the
+  specific question, or if it only shares surface keywords with the query.
+- Do NOT consider whether a chunk alone is sufficient to answer the query;
+  only judge whether it contributes useful signal.
+- Do NOT hallucinate. Base every judgment solely on the text provided.
+- For each chunk, write brief reasoning BEFORE the verdict.
+- Return exactly one verdict per chunk, using the same chunk_index as given,
+  and grade every chunk — do not skip any."""
 
 _GROUNDEDNESS_GRADER_SYSTEM = """\
 You are a rigorous fact-checking judge for a retrieval-augmented generation (RAG) system.
@@ -126,22 +229,41 @@ You are a rigorous fact-checking judge for a retrieval-augmented generation (RAG
 Your task: determine whether every factual claim in the ANSWER is directly supported
 by information present in the CONTEXT CHUNKS.
 
+Required approach — follow these steps in order, do not skip the decomposition:
+STEP 1: Break the ANSWER into its individual factual claims (numbers, names,
+        causal statements, definitions, conclusions — each one separately).
+        COMPLETENESS CHECK: every sentence in the ANSWER must produce at least
+        one claim. If the ANSWER has 3 sentences, your list must cover all 3 —
+        do not silently skip a sentence because it looks fine at a glance.
+STEP 2: For each claim, search the CONTEXT CHUNKS for direct or logically
+        equivalent support. Record "supported by chunk [N]" or "UNSUPPORTED".
+STEP 3: Only after completing that per-claim walkthrough, decide the overall
+        ``grounded`` verdict: true only if every claim was supported.
+
 Rules:
 - A claim is SUPPORTED if the exact fact (or a logically equivalent statement)
   appears in at least one of the context chunks.
 - A claim is UNSUPPORTED if it introduces facts, numbers, names, causal claims, or
   conclusions that are not present in any of the context chunks — even if the claim
-  seems plausible or likely true.
+  seems plausible, well-known, or likely true. Real-world truth is NOT grounding.
+- PARAPHRASE vs. NEW INFORMATION — judge by facts, not wording:
+    * Restating the SAME fact in different words, summarizing a longer passage,
+      or combining two chunk statements into one sentence is SUPPORTED. Compare
+      what the claim actually asserts to what the chunk actually asserts — if
+      they describe the same underlying fact, wording differences don't matter.
+      Example: chunk says "Types: a. Classification: Predicting a discrete
+      category. b. Regression: Predicting a continuous value." → claim "aiming
+      to predict categories (classification) or continuous values (regression)"
+      is SUPPORTED (same facts, compressed wording), NOT unsupported.
+    * Introducing a fact, number, name, or claim that the chunk does not state
+      and does not logically entail is UNSUPPORTED. Example: chunk describes
+      clustering and dimensionality reduction; claim adds "used primarily in
+      fraud detection" → UNSUPPORTED (that's new information, not a paraphrase).
 - Common knowledge hedges (e.g., "water is wet") can be ignored only if they are
-  truly non-substantive. When in doubt, flag it.
+  truly non-substantive.
 - Do NOT judge whether the answer is correct in the real world. Only judge whether
   it is grounded in the provided context.
-- Reproduce unsupported claims verbatim or as short direct quotes.
-
-Respond ONLY in this exact JSON format, no other text:
-{"grounded": <true|false>, "unsupported_claims": [<"claim1">, <"claim2">, ...]}
-
-If fully grounded, return an empty list: {"grounded": true, "unsupported_claims": []}"""
+- Reproduce unsupported claims verbatim or as short direct quotes."""
 
 _USEFULNESS_GRADER_SYSTEM = """\
 You are a quality-control judge for a retrieval-augmented generation (RAG) system.
@@ -159,12 +281,17 @@ Rules:
     (b) only restates the question or says "I don't know,"
     (c) is so heavily caveated or generic that it provides no real guidance,
     (d) is factually responsive but critically incomplete (e.g., lists 1 of 5
-        required steps and stops).
+        required steps and stops),
+    (e) MULTI-PART QUESTIONS: if the query asks to compare, differentiate,
+        list, or enumerate multiple named items (e.g. "difference between X
+        and Y", "compare A and B", "what are the causes of Z"), the answer
+        must address EVERY named item. An answer about only X when the query
+        asked for "X vs Y" is NOT USEFUL, even if what it says about X is
+        perfectly accurate — silently dropping half the question is exactly
+        the kind of regression this check exists to catch.
 - Do NOT penalise appropriate uncertainty hedges (e.g., "consult a doctor") when
   those hedges are genuinely warranted by the domain.
-
-Respond ONLY in this exact JSON format, no other text:
-{"useful": <true|false>, "reason": "<one concise sentence>"}"""
+- First write your reasoning, THEN decide the verdict."""
 
 _QUERY_REWRITER_SYSTEM = """\
 You are a search query optimiser for a retrieval-augmented generation (RAG) system.
@@ -197,15 +324,18 @@ class RetrievalGrader:
     is spread across multiple chunks.
     """
 
-    def __init__(self, model: str = _DEFAULT_MODEL) -> None:
+    def __init__(self, model: str = _JUDGE_MODEL) -> None:
         """
         Initializes the grader and wires the structured-output chain.
 
         Args:
-            model: Anthropic model identifier.  Defaults to Claude Sonnet.
+            model: Ollama model tag for this judge/grading role. Defaults to
+                   OLLAMA_JUDGE_MODEL (qwen2.5:14b-instruct) — deliberately NOT
+                   the generation model, to avoid self-grading bias.
         """
         llm = _build_llm(model)
         self._chain = llm.with_structured_output(RetrievalGrading)
+        self._batch_chain = llm.with_structured_output(RetrievalGradingBatch)
 
     def grade(self, query: str, chunk: str) -> RetrievalGrading:
         """
@@ -217,14 +347,60 @@ class RetrievalGrader:
 
         Returns:
             ``RetrievalGrading`` with fields:
+            - ``reasoning`` (str): Analysis written before the verdict.
             - ``relevant`` (bool): True if the chunk is useful.
-            - ``reason`` (str): One-sentence rationale.
         """
         messages = [
             SystemMessage(content=_RETRIEVAL_GRADER_SYSTEM),
             HumanMessage(content=f"QUERY: {query}\n\nDOCUMENT CHUNK:\n{chunk}"),
         ]
         return self._chain.invoke(messages)
+
+    def grade_batch(self, query: str, chunks: List[str]) -> List[RetrievalGrading]:
+        """
+        Grades ALL *chunks* against *query* in a single LLM call instead of one
+        call per chunk. This is the primary latency fix for ``node_grade_chunks``:
+        with N retrieved chunks, the old per-chunk loop made N sequential blocking
+        calls to the local model; this makes exactly 1 call regardless of N.
+
+        Falls back to per-chunk ``grade()`` calls if the batch call fails to
+        return a verdict for every chunk (e.g. the model dropped one under
+        structured-output pressure) — correctness over speed.
+
+        Args:
+            query:  The user's search query.
+            chunks: Raw text content of all retrieved chunks, in order.
+
+        Returns:
+            List of ``RetrievalGrading``, one per chunk, in the same order as
+            *chunks*.
+        """
+        if not chunks:
+            return []
+
+        numbered = "\n\n".join(
+            f"[{i + 1}] {chunk}" for i, chunk in enumerate(chunks)
+        )
+        messages = [
+            SystemMessage(content=_RETRIEVAL_GRADER_BATCH_SYSTEM),
+            HumanMessage(
+                content=f"QUERY: {query}\n\nDOCUMENT CHUNKS:\n{numbered}"
+            ),
+        ]
+
+        try:
+            batch_result = self._batch_chain.invoke(messages)
+            by_index = {v.chunk_index: v for v in batch_result.verdicts}
+            results: List[RetrievalGrading] = []
+            for i in range(len(chunks)):
+                v = by_index.get(i + 1)
+                if v is None:
+                    raise ValueError(f"batch grader omitted chunk_index={i + 1}")
+                results.append(RetrievalGrading(reasoning=v.reasoning, relevant=v.relevant))
+            return results
+        except Exception:
+            # Correctness fallback: one call per chunk, slower but always complete.
+            return [self.grade(query=query, chunk=c) for c in chunks]
 
 
 # ---------------------------------------------------------------------------
@@ -242,12 +418,14 @@ class AnswerGroundednessGrader:
     to prevent the model from injecting out-of-context facts.
     """
 
-    def __init__(self, model: str = _DEFAULT_MODEL) -> None:
+    def __init__(self, model: str = _JUDGE_MODEL) -> None:
         """
         Initializes the grader and wires the structured-output chain.
 
         Args:
-            model: Anthropic model identifier.  Defaults to Claude Sonnet.
+            model: Ollama model tag for this judge/grading role. Defaults to
+                   OLLAMA_JUDGE_MODEL (qwen2.5:14b-instruct) — deliberately NOT
+                   the generation model, to avoid self-grading bias.
         """
         llm = _build_llm(model)
         self._chain = llm.with_structured_output(GroundednessGrading)
@@ -294,12 +472,14 @@ class AnswerUsefulnessGrader:
     and legal domains where hedging is both correct and responsible.
     """
 
-    def __init__(self, model: str = _DEFAULT_MODEL) -> None:
+    def __init__(self, model: str = _JUDGE_MODEL) -> None:
         """
         Initializes the grader and wires the structured-output chain.
 
         Args:
-            model: Anthropic model identifier.  Defaults to Claude Sonnet.
+            model: Ollama model tag for this judge/grading role. Defaults to
+                   OLLAMA_JUDGE_MODEL (qwen2.5:14b-instruct) — deliberately NOT
+                   the generation model, to avoid self-grading bias.
         """
         llm = _build_llm(model)
         self._chain = llm.with_structured_output(UsefulnessGrading)
@@ -314,8 +494,8 @@ class AnswerUsefulnessGrader:
 
         Returns:
             ``UsefulnessGrading`` with fields:
+            - ``reasoning`` (str): Analysis written before the verdict.
             - ``useful`` (bool): True if the answer resolves the query.
-            - ``reason`` (str): One-sentence rationale.
         """
         messages = [
             SystemMessage(content=_USEFULNESS_GRADER_SYSTEM),
@@ -338,12 +518,14 @@ class QueryRewriter:
     toward more specific or technically precise terms.
     """
 
-    def __init__(self, model: str = _DEFAULT_MODEL) -> None:
+    def __init__(self, model: str = _JUDGE_MODEL) -> None:
         """
         Initializes the rewriter with a plain-text (non-structured) LLM chain.
 
         Args:
-            model: Anthropic model identifier.  Defaults to Claude Sonnet.
+            model: Ollama model tag for this judge/grading role. Defaults to
+                   OLLAMA_JUDGE_MODEL (qwen2.5:14b-instruct) — deliberately NOT
+                   the generation model, to avoid self-grading bias.
         """
         self._llm = _build_llm(model)
 

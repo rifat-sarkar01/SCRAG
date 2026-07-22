@@ -144,13 +144,22 @@ def _get_query_rewriter() -> QueryRewriter:
 
 
 def _get_correction_llm() -> ChatOllama:
-    """Returns a cached ChatOllama instance used exclusively for correction."""
+    """
+    Returns a cached ChatOllama instance used exclusively for correction.
+
+    Uses OLLAMA_JUDGE_MODEL (not OLLAMA_MODEL): the correction step is a strict
+    rule-following compliance task (remove exactly the flagged unsupported
+    claims, touch nothing else) rather than open-ended generation, so it
+    benefits from the stronger, non-self-grading judge model — this is the
+    step that produces the final answer text the eval score is based on.
+    """
     global _correction_llm
     if _correction_llm is None:
         _correction_llm = ChatOllama(
-            model=os.environ.get("OLLAMA_MODEL", "qwen3-vl:8b-instruct-q8_0"),
+            model=os.environ.get("OLLAMA_JUDGE_MODEL", "qwen2.5:14b-instruct"),
             base_url=os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434"),
             temperature=0.0,
+            keep_alive="30m",
         )
     return _correction_llm
 
@@ -177,11 +186,28 @@ ABSOLUTE RULES — violating any of these is a critical failure:
    verbatim or make only the minimal change required.
 5. If removing the unsupported claims leaves a correct, shorter answer, that is
    the right output.  Do not pad.
+6. SCOPE PRESERVATION — this is the rule most often violated, watch it closely:
+   the QUESTION may name multiple entities/topics to cover (e.g. "difference
+   between X and Y", "compare A and B", "list the causes of Z"). An unsupported
+   claim about ONE of those entities is NOT grounds to drop that entire entity
+   from the answer. Check the CONTEXT again for OTHER supported facts about
+   that same entity before deciding to remove it — if the context supports
+   *some* description of it, keep that description and remove only the specific
+   unsupported clause. Only drop an entire entity/topic if the context contains
+   NOTHING usable about it at all.
+7. GRANULARITY OF EDITS — remove the smallest span that eliminates the
+   unsupported claim (a clause, a number, a qualifier). Do NOT delete an entire
+   sentence or an entire topic when only one word or phrase within it is
+   actually unsupported.
 
 Approach:
 - Read each sentence/claim in the ORIGINAL ANSWER.
 - Check whether the CONTEXT supports it.
 - Keep it if supported; remove (or soften to "not mentioned in context") if not.
+- Before finalizing, re-read the QUESTION: does your revised answer still
+  address every entity/part the question named? If the question asked for a
+  comparison and the context supports facts about both sides, your answer
+  must still cover both sides.
 - Return the corrected answer only — no preamble, no explanation, no meta-commentary.\
 """
 
@@ -191,6 +217,7 @@ def _generate_corrected_answer(
     original_answer: str,
     relevant_chunks: List[str],
     unsupported_claims: List[str],
+    claim_analysis: str = "",
 ) -> str:
     """
     Targeted claim-level correction: removes unsupported claims while leaving
@@ -204,6 +231,15 @@ def _generate_corrected_answer(
                            for generation.  Passed to the correction LLM as the
                            sole allowed source of facts.
         unsupported_claims: Claims flagged by the groundedness grader.
+        claim_analysis:     The groundedness grader's full claim-by-claim
+                           walkthrough (which claims WERE supported, and by
+                           which chunk — not just which were unsupported).
+                           Handing this to the corrector directly, instead of
+                           making it re-derive "what's still supported" from
+                           scratch, is what actually fixes the over-deletion
+                           failure mode (a prose "don't over-delete" rule
+                           alone was not reliably followed — this makes the
+                           already-verified answer key explicit instead).
 
     Returns:
         A corrected answer string with unsupported claims removed/softened.
@@ -213,11 +249,21 @@ def _generate_corrected_answer(
     )
     claims_block = "\n".join(f"  - {c}" for c in unsupported_claims)
 
+    analysis_block = (
+        f"GROUNDEDNESS ANALYSIS (already verified — this tells you exactly "
+        f"what IS supported and by which chunk; do not re-derive this, use "
+        f"it directly to decide what to keep):\n{claim_analysis}\n\n"
+        if claim_analysis
+        else ""
+    )
+
     user_content = (
         f"QUESTION: {original_query}\n\n"
         f"CONTEXT:\n{numbered_chunks}\n\n"
         f"ORIGINAL ANSWER:\n{original_answer}\n\n"
-        f"CLAIMS FLAGGED AS UNSUPPORTED (remove these):\n{claims_block}\n\n"
+        f"{analysis_block}"
+        f"CLAIMS FLAGGED AS UNSUPPORTED (remove ONLY these; everything else "
+        f"the analysis above marked as supported must be kept):\n{claims_block}\n\n"
         "Produce the corrected answer now:"
     )
 
@@ -253,10 +299,31 @@ class GraphState(TypedDict, total=False):
     draft_answer            Current candidate answer; overwritten each generate cycle.
     final_answer            Copied from draft_answer when the graph reaches END.
     unsupported_claims      Claims flagged by the last ``grade_groundedness`` call.
+    claim_analysis          Full claim-by-claim walkthrough from the last
+                            ``grade_groundedness`` call (which claims were
+                            SUPPORTED and by which chunk, not just which were
+                            UNSUPPORTED). Forwarded to ``regenerate`` so the
+                            correction step has an explicit answer key for what
+                            to keep, instead of having to re-derive it from
+                            scratch under prompt-instruction pressure alone.
     per_claim_verdicts      Detailed per-claim faithfulness log from groundedness grader.
     retrieval_retry_count   rewrite_query→retrieve cycles completed (cap: 2).
     groundedness_retry_count  regenerate cycles completed (cap: 2).
     usefulness_retry_count  Usefulness-driven full cycles completed (cap: 1).
+    _usefulness_result      Routing-control flag written by ``grade_usefulness``
+                            and read by ``route_after_grade_usefulness``. THIS
+                            FIELD MUST STAY DECLARED HERE. LangGraph silently
+                            drops any key a node returns that isn't part of the
+                            declared schema — no error, no warning. Before this
+                            field was added, ``grade_usefulness`` correctly
+                            computed and logged "not useful" in the trace, but
+                            the routing key itself never survived the state
+                            merge, so ``route_after_grade_usefulness`` always
+                            read the fallback default (True) and NEVER routed
+                            to ``rewrite_query`` — the entire usefulness retry
+                            loop was dead code regardless of what the grader
+                            decided. Confirmed with a minimal LangGraph
+                            reproduction before this fix; see tests/test_correction.py.
     correction_rounds       Total correction (regenerate) rounds executed.
     correction_context      Full chunk texts used during correction — returned to
                             the eval harness for exact RAGAS context pairing.
@@ -278,12 +345,14 @@ class GraphState(TypedDict, total=False):
     draft_answer: str
     final_answer: str
     unsupported_claims: List[str]
+    claim_analysis: str
     per_claim_verdicts: List[Dict[str, Any]]  # per-claim faithfulness detail
 
     # --- retry counters (incremented inside action nodes) ---
     retrieval_retry_count: int
     groundedness_retry_count: int
     usefulness_retry_count: int
+    _usefulness_result: bool      # routing flag — see docstring above; must stay declared
 
     # --- instrumentation ---
     correction_rounds: int        # total regenerate rounds executed
@@ -381,13 +450,17 @@ def node_grade_chunks(state: GraphState) -> Dict[str, Any]:
     relevant: List[str] = []
     irrelevant: List[str] = []
 
-    for chunk in chunks:
-        result = grader.grade(query=query, chunk=chunk)
+    # Single batched call instead of one call per chunk — was the main source
+    # of the graph pipeline's latency overhead vs. baseline (N sequential
+    # blocking LLM calls collapsed into 1).
+    batch_results = grader.grade_batch(query=query, chunks=chunks)
+
+    for chunk, result in zip(chunks, batch_results):
         grades.append({
             "chunk": chunk[:120] + ("…" if len(chunk) > 120 else ""),
             "chunk_full": chunk,  # full text preserved for eval context pairing
             "relevant": result.relevant,
-            "reason": result.reason,
+            "reasoning": result.reasoning,
         })
         (relevant if result.relevant else irrelevant).append(chunk)
 
@@ -566,6 +639,7 @@ def node_grade_groundedness(state: GraphState) -> Dict[str, Any]:
         decision=decision,
         detail={
             "grounded": result.grounded,
+            "claim_analysis": result.claim_analysis,
             "unsupported_claims": result.unsupported_claims,
             "per_claim_verdicts": per_claim_verdicts,
             "context_chunk_count": len(chunk_texts),
@@ -574,6 +648,7 @@ def node_grade_groundedness(state: GraphState) -> Dict[str, Any]:
 
     return {
         "unsupported_claims": result.unsupported_claims,
+        "claim_analysis": result.claim_analysis,
         "per_claim_verdicts": per_claim_verdicts,
         "trace": trace,
     }
@@ -600,13 +675,14 @@ def node_regenerate(state: GraphState) -> Dict[str, Any]:
     Increments ``groundedness_retry_count`` and ``correction_rounds``.
 
     Reads:  ``original_query``, ``relevant_chunks``, ``unsupported_claims``,
-            ``draft_answer``
+            ``claim_analysis``, ``draft_answer``
     Writes: ``draft_answer``, ``correction_context``, ``groundedness_retry_count``,
             ``correction_rounds``, ``trace``
     """
     original_query = state["original_query"]
     relevant_chunks = state.get("relevant_chunks", [])
     unsupported_claims = state.get("unsupported_claims", [])
+    claim_analysis = state.get("claim_analysis", "")
     original_answer = state.get("draft_answer", "")
 
     groundedness_retry_count = state.get("groundedness_retry_count", 0) + 1
@@ -624,6 +700,7 @@ def node_regenerate(state: GraphState) -> Dict[str, Any]:
         original_answer=original_answer,
         relevant_chunks=chunk_texts,
         unsupported_claims=unsupported_claims,
+        claim_analysis=claim_analysis,
     )
 
     trace = list(state.get("trace", []))
@@ -682,7 +759,7 @@ def node_grade_usefulness(state: GraphState) -> Dict[str, Any]:
         node="grade_usefulness",
         query=original_query,
         decision=decision,
-        detail={"useful": result.useful, "reason": result.reason},
+        detail={"useful": result.useful, "reasoning": result.reasoning},
     ))
 
     # Stash the usefulness result so the router can read it without rerunning the grader.
