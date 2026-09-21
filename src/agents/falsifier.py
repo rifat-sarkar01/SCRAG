@@ -64,8 +64,11 @@ ENABLE_FALSIFICATION: bool = (
     os.environ.get("ENABLE_FALSIFICATION", "false").strip().lower() == "true"
 )
 
-# Path for JSONL trace log.  Created on first write if it doesn't exist.
-_LOG_PATH = Path("eval") / "falsification_log.jsonl"
+# Path for JSONL trace log.  Anchored to the project root (two levels up from
+# this file: src/agents/falsifier.py → src/agents → src → project root) so it
+# resolves correctly regardless of the working directory the app is launched from.
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent.parent
+_LOG_PATH = _PROJECT_ROOT / "eval" / "falsification_log.jsonl"
 
 logger = logging.getLogger(__name__)
 

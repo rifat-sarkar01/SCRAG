@@ -1015,10 +1015,12 @@ def run_corrected_query(query: str) -> Dict[str, Any]:
         "draft_answer": "",
         "final_answer": "",
         "unsupported_claims": [],
+        "claim_analysis": "",        # must be seeded — node_regenerate reads it
         "per_claim_verdicts": [],
         "retrieval_retry_count": 0,
         "groundedness_retry_count": 0,
         "usefulness_retry_count": 0,
+        "_usefulness_result": True,   # must be seeded — router reads it; True = safe default
         "correction_rounds": 0,
         "correction_context": [],
         "reretrieval_happened": False,

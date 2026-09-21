@@ -1,10 +1,10 @@
+# Runtime dependencies (needed to run the chatbot + RAG pipeline)
 faiss-cpu
 langchain
-langgraph
+langchain-core
 langchain-ollama
+langgraph
 sentence-transformers
-ragas
 python-dotenv
 pydantic
-bert-score
-rouge-score
+streamlit

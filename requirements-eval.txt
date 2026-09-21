@@ -1,0 +1,5 @@
+# Evaluation-only dependencies (not needed to run the chatbot)
+# Install with: pip install -r requirements-eval.txt
+ragas
+bert-score
+rouge-score
